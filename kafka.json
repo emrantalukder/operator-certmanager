@@ -1,0 +1,21 @@
+{
+  "CN": "kafka",
+  "hosts": [
+    "*.cluster.local",
+    "*.svc.cluster.local",
+    "*.operator.svc.cluster.local",
+    "*.kafka.operator.svc.cluster.local",
+    "*.kafka.operator.svc.cluster.local"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "ST": "CA",
+      "L": "Palo Alto"
+    }
+  ]
+}
