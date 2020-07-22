@@ -716,13 +716,13 @@ controlcenter:
       zookeeper:
         endpoint: zookeeper:2181
     connectCluster:
-      enabled: false
+      enabled: true
       url: http://connectors:8083
     ksql:
-      enabled: false
+      enabled: true
       url: http://ksql:9088
     schemaRegistry:
-      enabled: false
+      enabled: true
       url: http://schemaregistry:8081
   ##
   ## C3 External Access
