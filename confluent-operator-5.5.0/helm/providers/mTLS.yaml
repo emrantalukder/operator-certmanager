@@ -50,9 +50,9 @@ kafka:
   replicas: 3
   configOverrides:
     server:
-      - "ssl.endpoint.identification.algorithm="
-      - "confluent.metrics.reporter.ssl.endpoint.identification.algorithm="
-      - "listener.security.protocol.map=INTERNAL:SSL,REPLICATION:SSL,EXTERNAL:SSL"
+      - "ssl.endpoint.identification.algorithm= "
+      - "confluent.metrics.reporter.ssl.endpoint.identification.algorithm= "
+      - "listener.security.protocol.map=INTERNAL:SSL,REPLICATION:SSL,EXTERNAL:SASL_SSL"
     jvm: []
     log4j: []
   resources:
@@ -70,6 +70,8 @@ kafka:
   tls:
     enabled: true
     internal: true
+    authentication:
+      type: plain
     fullchain: |-
       -----BEGIN CERTIFICATE-----
       MIIEWzCCA0OgAwIBAgIUVjucXfsXmS79EWrcZRKFxB5QE6MwDQYJKoZIhvcNAQEL
