@@ -51,8 +51,16 @@ kafka:
   configOverrides:
     server:
       - "ssl.endpoint.identification.algorithm= "
+      - "listener.security.protocol.map=INTERNAL:SASL_SSL,REPLICATION:SASL_SSL,EXTERNAL:SASL_SSL"
+      - "listener.name.internal.plain.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username=\"test\" password=\"test123\" user_test=\"test123\";"
+      - "listener.name.external.plain.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username=\"test\" password=\"test123\" user_test=\"test123\";"
+      - "listener.name.replication.plain.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username=\"test\" password=\"test123\" user_test=\"test123\";"
       - "confluent.metrics.reporter.ssl.endpoint.identification.algorithm= "
-      - "listener.security.protocol.map=INTERNAL:SSL,REPLICATION:SSL,EXTERNAL:SASL_SSL"
+      - "confluent.metrics.reporter.bootstrap.servers=kafka:9071"
+      - "confluent.metrics.reporter.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username=\"test\" password=\"test123\";"
+      # - "listener.name.internal.plain.sasl.jaas.config=io.confluent.kafka.server.plugins.auth.FileBasedLoginModule required username=\"test\" password=\"test123\" config_path=\"/mnt/secrets/apikeys.json\" refresh_ms=\"30000\";"
+      # - "listener.name.external.plain.sasl.jaas.config=io.confluent.kafka.server.plugins.auth.FileBasedLoginModule required username=\"test\" password=\"test123\" config_path=\"/mnt/secrets/apikeys.json\" refresh_ms=\"30000\";"
+      # - "listener.name.replication.plain.sasl.jaas.config=io.confluent.kafka.server.plugins.auth.FileBasedLoginModule required username=\"test\" password=\"test123\" config_path=\"/mnt/secrets/apikeys.json\" refresh_ms=\"30000\";"
     jvm: []
     log4j: []
   resources:
@@ -202,7 +210,7 @@ kafka:
       enabled: true
       internal: true
       authentication:
-        type: tls
+        type: plain
       bootstrapEndpoint: kafka.operator.svc.cluster.local:9071
 
 ## Connect Cluster
@@ -217,11 +225,11 @@ connect:
     limits: {}
   jvmConfig:
     heapSize: 1G
-  replicas: 1
+  replicas: 2
   tls:
     enabled: false
     authentication:
-      type: tls
+      type: plain
     fullchain: |-
       -----BEGIN CERTIFICATE-----
       MIIEOTCCAyGgAwIBAgIUCZctdna/s8/7417bHYhVH6FbzLwwDQYJKoZIhvcNAQEL
@@ -357,7 +365,7 @@ connect:
         enabled: true
         internal: true
         authentication:
-         type: tls
+         type: plain
     schemaRegistry:
       enabled: true
       url: http://schemaregistry:8081
@@ -370,7 +378,7 @@ replicator:
   tls:
     enabled: false
     authentication:
-      type: ""
+      type: plain
     fullchain: |-
     privkey: |-
     cacerts: |-
@@ -391,7 +399,7 @@ schemaregistry:
   tls:
     enabled: false
     authentication:
-      type: tls
+      type: plain
     fullchain: |-
       -----BEGIN CERTIFICATE-----
       MIIERDCCAyygAwIBAgIUa3k0y+RsndT/jHwSAmzfXJ/053YwDQYJKoZIhvcNAQEL
@@ -526,7 +534,7 @@ schemaregistry:
         enabled: true
         internal: true
         authentication:
-         type: tls
+         type: plain
 
 ##
 ## KSQL
@@ -545,7 +553,7 @@ ksql:
   tls:
     enabled: false
     authentication:
-      type: tls
+      type: plain
     fullchain: |-
       -----BEGIN CERTIFICATE-----
       MIIEMDCCAxigAwIBAgIUQvqvkhGoT3bv6wEpek272SUvnI4wDQYJKoZIhvcNAQEL
@@ -681,13 +689,13 @@ ksql:
         enabled: true
         internal: true
         authentication:
-         type: tls
+         type: plain
     schemaRegistry:
       enabled: true
       tls:
         enabled: true
         authentication:
-          type: tls
+          type: plain
       url: http://schemaregistry:8081
 
 ## Control Center (C3) Resource configuration
@@ -714,17 +722,17 @@ controlcenter:
         enabled: true
         internal: true
         authentication:
-         type: tls
+         type: plain
       zookeeper:
         endpoint: zookeeper:2181
     connectCluster:
-      enabled: true
+      enabled: false
       url: http://connectors:8083
     ksql:
-      enabled: true
+      enabled: false
       url: http://ksql:9088
     schemaRegistry:
-      enabled: true
+      enabled: false
       url: http://schemaregistry:8081
   ##
   ## C3 External Access
@@ -738,7 +746,7 @@ controlcenter:
   tls:
     enabled: false
     authentication:
-      type: tls
+      type: plain
     fullchain: |-
       -----BEGIN CERTIFICATE-----
       MIIEOjCCAyKgAwIBAgIUI/ww9lYltQFRZXQQrDDAHiIv+p4wDQYJKoZIhvcNAQEL
